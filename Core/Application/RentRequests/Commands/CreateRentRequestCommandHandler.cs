@@ -15,7 +15,7 @@ namespace Application.RentRequests.Commands
         readonly IMailSender _mailSender = mailSender;
         public async Task<Guid> Handle(CreateRentRequestCommand request, CancellationToken cancellationToken)
         {
-            RentRequest rentRequest = _mapper.Map<RentRequest>(request); //TODO : Create RequestType mapping
+            RentRequest rentRequest = _mapper.Map<RentRequest>(request);
 
             string mailContent = GetReplacedMailContent(rentRequest);
             string[] participantArray = [$"{_configuration["CompanyMail"]}", "alperenerturk14@gmail.com", "helixsoftware.tr@gmail.com", "ysn.ayg@gmail.com"];
@@ -92,6 +92,7 @@ namespace Application.RentRequests.Commands
             mailContent = mailContent.Replace("{{RequestType}}", request.RequestType.ToString()); //TODO : Convert to RequestType string
             mailContent = mailContent.Replace("{{RentStartDate}}", request.RentStartDate.ToString());
             mailContent = mailContent.Replace("{{RentEndDate}}", request.RentEndDate.ToString());
+
 
             return mailContent;
         }

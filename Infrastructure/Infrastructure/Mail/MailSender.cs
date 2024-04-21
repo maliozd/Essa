@@ -1,4 +1,5 @@
-﻿using Application.Common.DTOs;
+﻿using Application;
+using Application.Common.DTOs;
 using Application.Common.Interfaces;
 using Microsoft.Extensions.Options;
 using System.Net.Mail;

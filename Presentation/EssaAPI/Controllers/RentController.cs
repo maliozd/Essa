@@ -1,4 +1,6 @@
 ﻿using Application.RentRequests.Commands;
+using Application.RentRequests.DTOs;
+using Application.RentRequests.Queries.GetRentRequests;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 
@@ -14,6 +16,12 @@ namespace EssaAPI.Controllers
         {
             var id = await _mediator.Send(createRentRequestCommand);
             return Ok(id);
+        }
+        [HttpGet]
+        public async Task<ActionResult<List<RentRequestDto>>> SGet()
+        {
+            var response = await _mediator.Send(new GetRentRequestQuery());
+            return Ok(response);
         }
     }
 }

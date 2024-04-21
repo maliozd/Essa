@@ -13,7 +13,6 @@ namespace Application
             });
 
             services.AddAutoMapper(Assembly.GetExecutingAssembly());
-
         }
     }
 }
