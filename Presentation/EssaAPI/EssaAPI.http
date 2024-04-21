@@ -1,0 +1,6 @@
+@EssaAPI_HostAddress = http://localhost:5224
+
+GET {{EssaAPI_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
