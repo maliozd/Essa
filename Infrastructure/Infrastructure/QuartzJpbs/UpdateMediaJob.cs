@@ -14,7 +14,7 @@ namespace EssaAPI.QuartzJpbs
 
         public async Task Execute(IJobExecutionContext context)
         {
-            await _mediator.Send(new UpdateInstaMediasCommand());
+            await _mediator.Send(new UpdateInstaMediasCommand("essakaravan"));
         }
     }
 }

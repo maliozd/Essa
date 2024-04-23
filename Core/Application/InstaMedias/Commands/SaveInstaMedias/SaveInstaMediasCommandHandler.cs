@@ -6,11 +6,8 @@ using MediatR;
 
 namespace Application.InstaMedias.Commands.SaveInstaMedias
 {
-    public class SaveInstaMediasCommandHandler(IInstaApiClient instaApi, IMapper mapper, IEssaDbContext dbContext) : IRequestHandler<SaveInstaMediasCommand>
+    public class SaveInstaMediasCommandHandler(IInstaApiClient _instaApi, IMapper _mapper, IEssaDbContext _dbContext) : IRequestHandler<SaveInstaMediasCommand>
     {
-        readonly IInstaApiClient _instaApi = instaApi;
-        readonly IMapper _mapper = mapper;
-        readonly IEssaDbContext _dbContext = dbContext;
 
         public async Task Handle(SaveInstaMediasCommand request, CancellationToken cancellationToken)
         {
@@ -18,10 +15,28 @@ namespace Application.InstaMedias.Commands.SaveInstaMedias
 
             foreach (Node node in mediaNodes)
             {
-                InstaMedia? media = _mapper.Map<InstaMedia>(node);
-                await _dbContext.InstaMedias.AddAsync(media);
+                InstaMedia? media = Map(node);
+                await AddMediaAsync(node, false, string.Empty);
+
+                foreach (var child in node.ChildNodes)
+                    await AddMediaAsync(child, true, media.InstaId);
             }
             await _dbContext.SaveChangesAsync(cancellationToken);
         }
+
+        async Task AddMediaAsync(Node node, bool isGalleryItem, string parentInstaId)
+        {
+            InstaMedia? media = Map(node);
+
+            if (_dbContext.InstaMedias.FirstOrDefault(m => m.InstaId == media.InstaId) is not null)
+                return;
+
+            media.IsGalleryItem = isGalleryItem;
+            media.ParentInstaId = parentInstaId;
+            await _dbContext.InstaMedias.AddAsync(media);
+        }
+
+        InstaMedia Map(Node node) => _mapper.Map<InstaMedia>(node);
+
     }
 }
